@@ -3,4 +3,54 @@ body{
 }
 h2{
     font-family: Arial, serif;
+
+}
+
+h3{
+    font-family: Arial, serif;
+
+}
+
+form{
+    border-radius: 20px;
+    width: 500px;
+    height: 550px;
+    box-shadow: 0px 5px 10px 3px rgba(34, 60, 80, 0.17);
+    margin: auto;
+    background-color: white;
+    padding: 5px;
+}
+
+input{
+    border: #e6e6e8 solid 1px;
+    background-color: #ececec;
+    height: 30px;
+
+    border-radius: 10px;
+    padding-right: 10px;
+    padding-left: 10px;
+    font-family: Arial, serif;
+}
+
+label{
+    margin-left: 20px;
+}
+
+button{
+    color: #d3f3fb;
+    font-family: Arial, serif;
+    font-size: 20px;
+    border-radius: 15px;
+    border: #d3f3fb;
+    background-color: #37763f;
+    margin-left: 40% !important;
+    height: 40px;
+    width: 100px !important;
+}
+
+.bg-blue{
+    background-color: #d3f3fb;
+}
+.mgt-10{
+    margin-top: 10px;
 }

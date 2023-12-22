@@ -1,16 +1,34 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Registration Form</title>
     <link rel="stylesheet" href="/static/css/mainstyle.css">
 </head>
-<body>
+<body class="bg-blue">
 <nav>
     <h2>Registration</h2>
 </nav>
 <div>
+<form>
+    <h2 align="center">FORM</h2>
+    <label>Name:</label>
+    <input type="text"><br><br>
+    <label>Lastname:</label>
+    <input type="text"><br><br>
+    <label>Surname:</label>
+    <input type="text"><br><br>
+    <label>Password:</label>
+    <input type="password"><br><br>
+    <label>DOB:</label>
+    <input type="date"><br><br>
+    <label>Series passport:</label>
+    <input type="text"><br><br>
+    <label>Number passport:</label>
+    <input type="text"><br><br>
 
+    <button type="submit">Submit</button>
+</form>
 </div>
 </body>
 </html>

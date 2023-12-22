@@ -12,7 +12,6 @@ public class Users {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
-
     private String Name;
     private String LastName;
     private String Surname;
