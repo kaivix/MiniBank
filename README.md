@@ -3,4 +3,6 @@
 
 ### Registration form v.1.0
 
-![image](https://github.com/kaivix/Mini_Bank/assets/74367464/d6637c41-6ca9-4efb-ae6b-d1122b5f7b8c)
+![image](https://github.com/kaivix/Mini_Bank/assets/74367464/d0eb58cd-1661-46ed-ac0b-b796d565a5bc)
+
+
