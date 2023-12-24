@@ -4,11 +4,14 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import java.sql.Date;
+import java.util.Collection;
 
 @Entity
-public class Users {
+public class Users implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
@@ -16,22 +19,33 @@ public class Users {
     private String LastName;
     private String Surname;
     private String Password;
+    private Long pnum;
     private Date DOB;
     private Long Series_of_passport;
     private Long Number_of_passport;
 
-    public Users() {
+    public Users(Long id, String name, String lastName, String surname, String password, Date DOB, Long series_of_passport, Long number_of_passport,Long pnum) {
+        this.id = id;
+        this.Name = name;
+        this.LastName = lastName;
+        this.Surname = surname;
+        this.Password = password;
+        this.pnum = pnum;
+        this.DOB = DOB;
+        this.Series_of_passport = series_of_passport;
+        this.Number_of_passport = number_of_passport;
     }
 
-    public Users(Long id, String name, String lastName, String surname, String password, Date DOB, Long series_of_passport, Long number_of_passport) {
-        this.id = id;
-        Name = name;
-        LastName = lastName;
-        Surname = surname;
-        Password = password;
-        this.DOB = DOB;
-        Series_of_passport = series_of_passport;
-        Number_of_passport = number_of_passport;
+    public Users() {
+
+    }
+
+    public Long getPnum() {
+        return pnum;
+    }
+
+    public void setPnum(Long pnum) {
+        this.pnum = pnum;
     }
 
     public String getName() {
@@ -58,8 +72,38 @@ public class Users {
         Surname = surname;
     }
 
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return null;
+    }
+
     public String getPassword() {
         return Password;
+    }
+
+    @Override
+    public String getUsername() {
+        return Name;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
     }
 
     public void setPassword(String password) {
