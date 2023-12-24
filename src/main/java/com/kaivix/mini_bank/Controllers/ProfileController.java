@@ -20,7 +20,7 @@ public class ProfileController {
 
     @GetMapping("/reg")
     public String reg(Model model){
-        model.addAttribute("users", new Users(pnum));
+        model.addAttribute("users", new Users());
         return "regis";
     }
 
