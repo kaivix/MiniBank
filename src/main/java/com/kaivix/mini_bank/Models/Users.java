@@ -13,7 +13,7 @@ public class Users implements UserDetails {
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "user_id")
     private Long id;
-    private String Name;
+    private String username;
     private String LastName;
     private String Surname;
     private String Password;
@@ -26,9 +26,9 @@ public class Users implements UserDetails {
     inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Collection<Role> roles;
 
-    public Users(Long id, String name, String lastName, String surname, String password, Long pnum, Date DOB, Long series_of_passport, Long number_of_passport, Collection<Role> roles) {
+    public Users(Long id, String username, String lastName, String surname, String password, Long pnum, Date DOB, Long series_of_passport, Long number_of_passport, Collection<Role> roles) {
         this.id = id;
-        Name = name;
+        this.username = username;
         LastName = lastName;
         Surname = surname;
         Password = password;
@@ -60,11 +60,11 @@ public class Users implements UserDetails {
     }
 
     public String getName() {
-        return Name;
+        return username;
     }
 
     public void setName(String name) {
-        Name = name;
+        username = name;
     }
 
     public String getLastName() {
@@ -94,7 +94,7 @@ public class Users implements UserDetails {
 
     @Override
     public String getUsername() {
-        return Name;
+        return username;
     }
 
     @Override
