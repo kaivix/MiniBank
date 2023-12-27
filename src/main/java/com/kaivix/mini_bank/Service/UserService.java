@@ -12,6 +12,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -28,7 +29,6 @@ public class UserService implements UserDetailsService {
     @Autowired
     public UserService(UserRepository userRepository, RoleRepository roleRepository) {
         this.userRepository = userRepository;
-
         this.roleRepository = roleRepository;
     }
 
@@ -37,7 +37,7 @@ public class UserService implements UserDetailsService {
     }
 
     public void save(Users users){
-
+        users.setRoles(List.of(roleRepository.findByName("ROLE_USER").get()));
         userRepository.save(users);
         System.out.println("Register user successfully!");
     }
