@@ -1,9 +1,6 @@
 package com.kaivix.mini_bank.Models;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -13,7 +10,8 @@ import java.util.Collection;
 @Entity
 public class Users implements UserDetails {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "user_id")
     private Long id;
     private String Name;
     private String LastName;
@@ -23,21 +21,34 @@ public class Users implements UserDetails {
     private Date DOB;
     private Long Series_of_passport;
     private Long Number_of_passport;
+    @ManyToMany
+    @JoinTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"),
+    inverseJoinColumns = @JoinColumn(name = "role_id"))
+    private Collection<Role> roles;
 
-    public Users(Long id, String name, String lastName, String surname, String password, Date DOB, Long series_of_passport, Long number_of_passport,Long pnum) {
+    public Users(Long id, String name, String lastName, String surname, String password, Long pnum, Date DOB, Long series_of_passport, Long number_of_passport, Collection<Role> roles) {
         this.id = id;
-        this.Name = name;
-        this.LastName = lastName;
-        this.Surname = surname;
-        this.Password = password;
+        Name = name;
+        LastName = lastName;
+        Surname = surname;
+        Password = password;
         this.pnum = pnum;
         this.DOB = DOB;
-        this.Series_of_passport = series_of_passport;
-        this.Number_of_passport = number_of_passport;
+        Series_of_passport = series_of_passport;
+        Number_of_passport = number_of_passport;
+        this.roles = roles;
     }
 
     public Users() {
 
+    }
+
+    public Collection<Role> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(Collection<Role> roles) {
+        this.roles = roles;
     }
 
     public Long getPnum() {
