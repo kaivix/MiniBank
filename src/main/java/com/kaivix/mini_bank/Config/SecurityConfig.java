@@ -4,12 +4,18 @@ import com.kaivix.mini_bank.Service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.HttpStatusEntryPoint;
 
 // @Configuration говорит Spring, что этот класс является источником определения бинов.
 @Configuration
@@ -23,7 +29,25 @@ public class SecurityConfig {
     // Объявление сервиса пользователей.
     private final UserService userService;
 
-
+    @Bean
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception{
+        http
+                .csrf(csrf -> csrf.disable())
+                .cors(cors -> cors.disable())
+                .authorizeHttpRequests((requests) -> requests
+                        .requestMatchers("/log").permitAll()
+                        .requestMatchers("/reg").permitAll()
+                        .requestMatchers("/").authenticated()
+                        .requestMatchers("/admin").hasAuthority("ROLE_ADMIN")
+                        .anyRequest().authenticated())
+                         .sessionManagement(session -> session
+                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                        .exceptionHandling(exceptions -> exceptions
+                                .authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED))
+                        )
+                        .httpBasic(Customizer.withDefaults());
+        return http.build();
+    }
 
     // @Bean говорит Spring, что следующий метод генерирует бин, который должен быть управляем Spring.
     @Bean
