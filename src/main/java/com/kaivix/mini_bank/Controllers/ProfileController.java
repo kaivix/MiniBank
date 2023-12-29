@@ -2,6 +2,7 @@ package com.kaivix.mini_bank.Controllers;
 
 import com.kaivix.mini_bank.Models.Users;
 import com.kaivix.mini_bank.Service.UserService;
+import com.kaivix.mini_bank.utils.JwtTokenUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -12,9 +13,11 @@ import org.springframework.web.bind.annotation.*;
 public class ProfileController {
 
     private final UserService userService;
+    private final JwtTokenUtils jwtTokenUtils;
     @Autowired
-    public ProfileController(UserService userService) {
+    public ProfileController(UserService userService, JwtTokenUtils jwtTokenUtils) {
         this.userService = userService;
+        this.jwtTokenUtils = jwtTokenUtils;
     }
 
 

@@ -1,5 +1,6 @@
 package com.kaivix.mini_bank.utils;
 
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.beans.factory.annotation.Value;
@@ -30,5 +31,18 @@ public class JwtTokenUtils {
         Date issuedDate = new Date();
         Date expiredDate = new Date(issuedDate.getTime() + lifetime.toMillis());
         return Jwts.builder().setClaims(claims).setSubject(userDetails.getUsername()).setIssuedAt(issuedDate).setExpiration(expiredDate).signWith(SignatureAlgorithm.HS256, secret).compact();
+    }
+
+    public String getUsername(String token){
+        return getAllClaimsFromToken(token).getSubject();
+    }
+
+    public List<String> getRoles(String token){
+        return getAllClaimsFromToken(token).get("roles", List.class);
+    }
+
+    private Claims getAllClaimsFromToken(String token){
+
+        return Jwts.parser().setSigningKey(secret).parseClaimsJwt(token).getBody();
     }
 }
