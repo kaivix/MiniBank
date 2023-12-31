@@ -16,6 +16,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.HttpStatusEntryPoint;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 // @Configuration говорит Spring, что этот класс является источником определения бинов.
 @Configuration
@@ -28,7 +29,7 @@ import org.springframework.security.web.authentication.HttpStatusEntryPoint;
 public class SecurityConfig {
     // Объявление сервиса пользователей.
     private final UserService userService;
-
+     private final JwtRequestFilter jwtRequestFilter;
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception{
         http
@@ -45,7 +46,9 @@ public class SecurityConfig {
                         .exceptionHandling(exceptions -> exceptions
                                 .authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED))
                         )
-                        .httpBasic(Customizer.withDefaults());
+                        .httpBasic(Customizer.withDefaults())
+                        .addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
+
         return http.build();
     }
 

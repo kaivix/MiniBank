@@ -25,6 +25,7 @@ import java.util.stream.Collectors;
 public class JwtRequestFilter extends OncePerRequestFilter {
 
     private final JwtTokenUtils jwtTokenUtils;
+
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String authHeader = request.getHeader("Autorithation");
@@ -40,6 +41,8 @@ public class JwtRequestFilter extends OncePerRequestFilter {
                 log.debug("Время вышло");
             }
         }
+
+        //Новый токен
         if (username != null && SecurityContextHolder.getContext() == null){
             UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(username,
                     null, jwtTokenUtils.getRoles(jwt).stream().map(SimpleGrantedAuthority::new).collect(Collectors.toList())
