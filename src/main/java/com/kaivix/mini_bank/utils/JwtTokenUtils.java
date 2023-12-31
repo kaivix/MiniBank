@@ -1,5 +1,6 @@
 package com.kaivix.mini_bank.utils;
 
+
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -21,28 +22,38 @@ public class JwtTokenUtils {
     private String secret;
 
     @Value("${jwt.lifetime}")
-    private Duration lifetime;
+    private Duration jwtLifetime;
 
-    public String generateToken(UserDetails userDetails){
+    public String generateToken(UserDetails userDetails) {
         Map<String, Object> claims = new HashMap<>();
-        List<String> roleList = userDetails.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList());
-        claims.put("roles", roleList);
+        List<String> rolesList = userDetails.getAuthorities().stream()
+                .map(GrantedAuthority::getAuthority)
+                .collect(Collectors.toList());
+        claims.put("roles", rolesList);
 
         Date issuedDate = new Date();
-        Date expiredDate = new Date(issuedDate.getTime() + lifetime.toMillis());
-        return Jwts.builder().setClaims(claims).setSubject(userDetails.getUsername()).setIssuedAt(issuedDate).setExpiration(expiredDate).signWith(SignatureAlgorithm.HS256, secret).compact();
+        Date expiredDate = new Date(issuedDate.getTime() + jwtLifetime.toMillis());
+        return Jwts.builder()
+                .setClaims(claims)
+                .setSubject(userDetails.getUsername())
+                .setIssuedAt(issuedDate)
+                .setExpiration(expiredDate)
+                .signWith(SignatureAlgorithm.HS256, secret)
+                .compact();
     }
 
-    public String getUsername(String token){
+    public String getUsername(String token) {
         return getAllClaimsFromToken(token).getSubject();
     }
 
-    public List<String> getRoles(String token){
+    public List<String> getRoles(String token) {
         return getAllClaimsFromToken(token).get("roles", List.class);
     }
 
-    private Claims getAllClaimsFromToken(String token){
-
-        return Jwts.parser().setSigningKey(secret).parseClaimsJwt(token).getBody();
+    private Claims getAllClaimsFromToken(String token) {
+        return Jwts.parser()
+                .setSigningKey(secret)
+                .parseClaimsJws(token)
+                .getBody();
     }
 }
