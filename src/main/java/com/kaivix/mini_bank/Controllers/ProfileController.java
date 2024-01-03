@@ -39,13 +39,11 @@ public class ProfileController {
     @GetMapping("/reg")
     public String reg(Model model){
         model.addAttribute("users", new Users());
-        System.out.println("Show reg");
         return "regis";
     }
 
     @PostMapping("/reg")
     public String create(@ModelAttribute("users") Users users) {
-        users.setName(users.getName());
         users.setPassword(passwordEncoder.encode(users.getPassword()));
         userService.save(users);
         return "redirect:/log";

@@ -1,5 +1,6 @@
 body{
     font-family: "Arial", serif;
+    background-color: #d6f7ff;
 }
 h2{
     font-family: Arial, serif;
@@ -16,7 +17,7 @@ form{
     height: 550px;
     box-shadow: 0 5px 10px 3px rgba(34, 60, 80, 0.17);
     margin: auto;
-    background-color: white;
+    background-color: #ffffff;
     padding: 5px;
 }
 
@@ -36,20 +37,17 @@ label{
 }
 
 button{
-    color: #d3f3fb;
+    color: #ffffff;
     font-family: Calibri, serif;
     font-size: 20px;
     border-radius: 15px;
     border: #d3f3fb;
-    background-color: #37763f;
+    background-color: #3ea84d;
     margin-left: 40% !important;
     height: 40px;
     width: 100px !important;
 }
 
-.bg-blue{
-    background-color: #d3f3fb;
-}
 .mgt-10{
     margin-top: 10px;
 }
