@@ -48,6 +48,10 @@ button{
     width: 100px !important;
 }
 
+.bg{
+    background-color: #caf7ff;
+}
+
 .mgt-10{
     margin-top: 10px;
 }

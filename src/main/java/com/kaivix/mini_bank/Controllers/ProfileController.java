@@ -56,7 +56,7 @@ public class ProfileController {
 
 
     @PostMapping("/log")
-    public ResponseEntity<?> createAuthToken(@RequestBody JwtRequest authRequest){
+    public ResponseEntity<?> createAuthToken(@RequestBody JwtRequest authRequest ){
         try {
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authRequest.getUsername(), authRequest.getPassword()));
             System.out.println(authRequest.getPassword());
