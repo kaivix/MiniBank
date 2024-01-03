@@ -12,30 +12,29 @@ import org.springframework.security.config.annotation.authentication.configurati
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.HttpStatusEntryPoint;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-// @Configuration говорит Spring, что этот класс является источником определения бинов.
 @Configuration
-// @EnableWebSecurity включает поддержку веб-безопасности.
 @EnableWebSecurity
-// @RequiredArgsConstructor генерирует конструктор для всех final полей.
 @RequiredArgsConstructor
-// @EnableGlobalMethodSecurity включает защиту на уровне метода.
 @EnableGlobalMethodSecurity(securedEnabled = true)
 public class SecurityConfig {
-    // Объявление сервиса пользователей.
     private final UserService userService;
      private final JwtRequestFilter jwtRequestFilter;
+
+
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception{
         http
                 .csrf(csrf -> csrf.disable())
                 .cors(cors -> cors.disable())
                 .authorizeHttpRequests((requests) -> requests
+                        .requestMatchers("/resources/**", "/static/**").permitAll()
                         .requestMatchers("/user/log").permitAll()
                         .requestMatchers("/user/reg").permitAll()
                         .requestMatchers("/admin").hasAuthority("ROLE_ADMIN")

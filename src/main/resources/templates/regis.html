@@ -3,17 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <title>Registration Form</title>
-    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <link rel="stylesheet" type="text/css" href="/static/mainstyle.css" th:href="@{/mainstyle.css}">
 </head>
 <body class="bg-blue">
 <nav>
     <h2>Registration</h2>
 </nav>
 <div>
-<form th:method="POST" th:action="@{/user}" th:object="${users}">
+<form th:method="POST" th:action="@{/user/reg}" th:object="${users}">
     <h2 align="center">FORM</h2>
     <label>Name:</label>
-    <input type="text" th:field="*{name}"><br><br>
+    <input type="text" th:field="*{username}"><br><br>
     <label>Lastname:</label>
     <input type="text" th:field="*{lastName}"><br><br>
     <label>Surname:</label>
@@ -22,12 +22,14 @@
     <input type="password" th:field="*{password}"><br><br>
     <label>DOB:</label>
     <input type="date" th:field="*{DOB}"><br><br>
+    <label>Phone num:</label>
+    <input type="text" th:field="*{pnum}"><br><br>
     <label>Series passport:</label>
     <input type="text" th:field="*{series_of_passport}"><br><br>
     <label>Number passport:</label>
     <input type="text" th:field="*{number_of_passport}"><br><br>
 
-    <button type="submit">Submit</button>
+    <button type="submit">Sign Up</button>
 </form>
 </div>
 </body>
