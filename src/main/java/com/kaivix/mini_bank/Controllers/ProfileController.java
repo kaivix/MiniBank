@@ -17,6 +17,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
 
 @Controller
@@ -35,10 +36,12 @@ public class ProfileController {
         this.passwordEncoder = passwordEncoder;
     }
 
+    //Зона регистрации
 
     @GetMapping("/reg")
     public String reg(Model model){
         model.addAttribute("users", new Users());
+        System.out.println("Show register form");
         return "regis";
     }
 
@@ -46,25 +49,27 @@ public class ProfileController {
     public String create(@ModelAttribute("users") Users users) {
         users.setPassword(passwordEncoder.encode(users.getPassword()));
         userService.save(users);
-        return "redirect:/log";
+        return "redirect:/user/log";
     }
 
+    //Зона логина
+
+    //Отображение страницы
     @GetMapping("/log")
     public String auth(){
         return "auth";
     }
 
-
+    //Отправка данных
     @PostMapping("/log")
-    public ResponseEntity<?> createAuthToken(@RequestBody JwtRequest authRequest ){
+    public ResponseEntity<?> createAuthToken(@RequestParam String username, @RequestParam String password) {
         try {
-            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authRequest.getUsername(), authRequest.getPassword()));
-            System.out.println(authRequest.getPassword());
+            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
         }
         catch (BadCredentialsException e){
-          return new  ResponseEntity<>(new AppError(HttpStatus.UNAUTHORIZED.value(), "Неверный логин или пароль"), HttpStatus.UNAUTHORIZED);
+            return new  ResponseEntity<>(new AppError(HttpStatus.UNAUTHORIZED.value(), "Неверный логин или пароль"), HttpStatus.UNAUTHORIZED);
         }
-        UserDetails userDetails = userService.loadUserByUsername(authRequest.getUsername());
+        UserDetails userDetails = userService.loadUserByUsername(username);
         String token = jwtTokenUtils.generateToken(userDetails);
         return ResponseEntity.ok(new JwtResponse(token));
     }

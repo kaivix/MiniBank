@@ -28,10 +28,10 @@ public class SecurityConfig {
     private final UserService userService;
      private final JwtRequestFilter jwtRequestFilter;
 
-     @Bean
-     public WebSecurityCustomizer webSecurityCustomizer() throws Exception{
-         return (web) -> web.ignoring().requestMatchers("/resources/**", "/static/**", "/css/**");
-     }
+    @Bean
+    public WebSecurityCustomizer webSecurityCustomizer() throws Exception{
+        return (web) -> web.ignoring().requestMatchers("/resources/**", "/static/**", "/css/**");
+    }
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception{
@@ -41,6 +41,8 @@ public class SecurityConfig {
                 .authorizeHttpRequests((requests) -> requests
                         .requestMatchers("/user/log").permitAll()
                         .requestMatchers("/user/reg").permitAll()
+                        .requestMatchers("/").permitAll()
+                        .requestMatchers("/user").permitAll()
                         .requestMatchers("/admin").hasAuthority("ROLE_ADMIN")
                         .anyRequest().authenticated())
                          .sessionManagement(session -> session

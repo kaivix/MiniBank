@@ -6,7 +6,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 @Controller
 public class MainController {
     @GetMapping("/")
-    private String home(){
-        return "home";
+    private String Welcome(){
+        System.out.println("Show welcome page");
+        return "welcome";
     }
+
 }

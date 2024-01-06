@@ -14,9 +14,7 @@ h3{
 form{
     border-radius: 20px;
     width: 500px;
-    height: 550px;
     box-shadow: 0 5px 10px 3px rgba(34, 60, 80, 0.17);
-    margin: auto;
     background-color: #ffffff;
     padding: 5px;
 }

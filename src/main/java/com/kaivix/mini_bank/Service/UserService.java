@@ -42,14 +42,14 @@ public class UserService implements UserDetailsService {
         System.out.println("Register user successfully!");
     }
 
-    public Optional<Users> findByName(String username) {
-        return userRepository.findByUsername(username);
+    public Optional<Users> findByName(String Username) {
+        return userRepository.findByUsername(Username);
     }
 
     @Override
     @Transactional
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Users users = findByName(username).orElseThrow(() -> new UsernameNotFoundException(String.format("not found", username)));
+    public UserDetails loadUserByUsername(String Username) throws UsernameNotFoundException {
+        Users users = findByName(Username).orElseThrow(() -> new UsernameNotFoundException(String.format("not found", Username)));
         return new User(users.getUsername(), users.getPassword(),
                 users.getRoles().stream().map(role -> new SimpleGrantedAuthority(role.getName())).collect(Collectors.toList()));
     }
