@@ -6,6 +6,8 @@ import com.kaivix.mini_bank.dto.AppError;
 import com.kaivix.mini_bank.dto.JwtRequest;
 import com.kaivix.mini_bank.dto.JwtResponse;
 import com.kaivix.mini_bank.utils.JwtTokenUtils;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.Banner;
 import org.springframework.http.HttpStatus;
@@ -21,7 +23,7 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
 
 @Controller
-@RequestMapping("/user")
+@RequestMapping( "/user")
 public class ProfileController {
 
     private final UserService userService;
@@ -74,5 +76,21 @@ public class ProfileController {
         return ResponseEntity.ok(new JwtResponse(token));
     }
 
+    @PostMapping("/logpost")
+    public ResponseEntity<?> createAuthToken(@RequestBody JwtRequest authRequest ){
+            try {
+                authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authRequest.getUsername(), authRequest.getPassword()));
+                System.out.println(authRequest.getPassword());
+            }
+        catch (BadCredentialsException e){
+                    return new  ResponseEntity<>(new AppError(HttpStatus.UNAUTHORIZED.value(), "Неверный логин или пароль"), HttpStatus.UNAUTHORIZED);
+            }
+            UserDetails userDetails = userService.loadUserByUsername(authRequest.getUsername());
+            String token = jwtTokenUtils.generateToken(userDetails);
+
+
+
+            return ResponseEntity.ok(new JwtResponse(token));
+        }
 
 }
