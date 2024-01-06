@@ -3,6 +3,9 @@
 
 ### Registration form v.1.0
 
-![image](https://github.com/kaivix/Mini_Bank/assets/74367464/d0eb58cd-1661-46ed-ac0b-b796d565a5bc)
+![image](https://github.com/kaivix/MiniBank/assets/74367464/bab4b7d1-21c6-4c23-83a1-6665df90204a)
 
+### Authentication form v.1.0
+
+![image](https://github.com/kaivix/MiniBank/assets/74367464/54da05f7-38b7-46de-b9e4-dc772c8160ef)
 
