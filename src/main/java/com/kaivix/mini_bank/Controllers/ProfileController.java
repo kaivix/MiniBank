@@ -64,7 +64,7 @@ public class ProfileController {
 
     //Отправка данных
     @PostMapping("/log")
-    public ResponseEntity<?> createAuthToken(@RequestParam String username, @RequestParam String password) {
+    public ResponseEntity<?> createAuthToken(@RequestParam String username, @RequestParam String password, HttpServletResponse response) {
         try {
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
         }
@@ -73,6 +73,11 @@ public class ProfileController {
         }
         UserDetails userDetails = userService.loadUserByUsername(username);
         String token = jwtTokenUtils.generateToken(userDetails);
+
+        Cookie cookie = new Cookie("token", token);
+
+        response.addCookie(cookie);
+
         return ResponseEntity.ok(new JwtResponse(token));
     }
 

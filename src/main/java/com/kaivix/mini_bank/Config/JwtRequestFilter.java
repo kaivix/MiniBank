@@ -3,10 +3,14 @@ import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.SignatureException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -27,16 +31,29 @@ public class JwtRequestFilter extends OncePerRequestFilter {
         String authHeader = request.getHeader("Authorization");
         String username = null;
         String jwt = null;
-        if (authHeader != null && authHeader.startsWith("Bearer ")) {
-            jwt = authHeader.substring(7);
-            try {
-                username = jwtTokenUtils.getUsername(jwt);
-            } catch (ExpiredJwtException e) {
-                log.debug("Время жизни токена вышло");
-            } catch (SignatureException e) {
-                log.debug("Подпись неправильная");
+
+
+        Cookie[] cookies = request.getCookies();
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                if (cookie.getName().equals("token")) {
+                    jwt = cookie.getValue();
+
+                    response.addHeader("Authorization", "Bearer " + jwt);
+                    System.out.println(response.getHeader(jwt));
+                    try {
+                        username = jwtTokenUtils.getUsername(jwt);
+                    } catch (ExpiredJwtException e) {
+                        log.debug("Время жизни токена вышло");
+                    } catch (SignatureException e) {
+                        log.debug("Подпись неправильная");
+                    }
+
+                }
             }
         }
+
+
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(
                     username,
@@ -45,6 +62,12 @@ public class JwtRequestFilter extends OncePerRequestFilter {
             );
             SecurityContextHolder.getContext().setAuthentication(token);
         }
+
+            // Добавляем токен в заголовок авторизации ответа
+
+
+
         filterChain.doFilter(request, response);
+
     }
 }

@@ -9,6 +9,7 @@ public class AdminController {
     @GetMapping("/admin")
     @PreAuthorize("hasRole('ADMIN')")
     public String showAdmin(){
+
         return "admin";
     }
 }
