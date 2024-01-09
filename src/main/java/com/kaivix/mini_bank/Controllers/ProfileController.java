@@ -82,10 +82,9 @@ public class ProfileController {
     }
 
     @PostMapping("/logpost")
-    public ResponseEntity<?> createAuthToken(@RequestBody JwtRequest authRequest ){
+    public ResponseEntity<?> createAuthToken(@RequestBody JwtRequest authRequest, HttpServletResponse response ){
             try {
                 authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authRequest.getUsername(), authRequest.getPassword()));
-                System.out.println(authRequest.getPassword());
             }
         catch (BadCredentialsException e){
                     return new  ResponseEntity<>(new AppError(HttpStatus.UNAUTHORIZED.value(), "Неверный логин или пароль"), HttpStatus.UNAUTHORIZED);
@@ -93,7 +92,9 @@ public class ProfileController {
             UserDetails userDetails = userService.loadUserByUsername(authRequest.getUsername());
             String token = jwtTokenUtils.generateToken(userDetails);
 
+            Cookie cookie = new Cookie("token", token);
 
+            response.addCookie(cookie);
 
             return ResponseEntity.ok(new JwtResponse(token));
         }

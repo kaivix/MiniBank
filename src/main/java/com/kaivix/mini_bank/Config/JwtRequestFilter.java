@@ -1,6 +1,7 @@
 package com.kaivix.mini_bank.Config;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.SignatureException;
+import jakarta.servlet.Filter;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.Cookie;
@@ -18,42 +19,42 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 import com.kaivix.mini_bank.utils.JwtTokenUtils;
 import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor
 @Slf4j
-public class JwtRequestFilter extends OncePerRequestFilter {
+public class JwtRequestFilter extends OncePerRequestFilter implements Filter {
     private final JwtTokenUtils jwtTokenUtils;
+
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String authHeader = request.getHeader("Authorization");
         String username = null;
         String jwt = null;
-
-
-        Cookie[] cookies = request.getCookies();
-        if (cookies != null) {
-            for (Cookie cookie : cookies) {
-                if (cookie.getName().equals("token")) {
-                    jwt = cookie.getValue();
-
-                    response.addHeader("Authorization", "Bearer " + jwt);
-                    System.out.println(response.getHeader(jwt));
-                    try {
-                        username = jwtTokenUtils.getUsername(jwt);
-                    } catch (ExpiredJwtException e) {
-                        log.debug("Время жизни токена вышло");
-                    } catch (SignatureException e) {
-                        log.debug("Подпись неправильная");
-                    }
-
-                }
+        if (authHeader != null && authHeader.startsWith("Bearer ")) {
+            jwt = authHeader.substring(7);
+            try {
+                username = jwtTokenUtils.getUsername(jwt);
+            } catch (ExpiredJwtException e) {
+                log.debug("Время жизни токена вышло");
+            } catch (SignatureException e) {
+                log.debug("Подпись неправильная");
             }
         }
-
-
+        if (jwt != null) {
+            try {
+                username = jwtTokenUtils.getUsername(jwt);
+                request.setAttribute("Authorization", "Bearer " + jwt);
+            } catch (ExpiredJwtException e) {
+                log.debug("Время жизни токена вышло");
+            } catch (SignatureException e) {
+                log.debug("Подпись неправильная");
+            }
+        }
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(
                     username,
@@ -62,12 +63,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
             );
             SecurityContextHolder.getContext().setAuthentication(token);
         }
-
-            // Добавляем токен в заголовок авторизации ответа
-
-
-
+        // Добавляем токен в заголовок авторизации ответа
         filterChain.doFilter(request, response);
-
     }
 }
