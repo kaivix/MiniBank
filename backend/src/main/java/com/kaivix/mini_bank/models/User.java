@@ -1,4 +1,4 @@
-package com.kaivix.mini_bank.domain;
+package com.kaivix.mini_bank.models;
 
 import jakarta.persistence.*;
 
